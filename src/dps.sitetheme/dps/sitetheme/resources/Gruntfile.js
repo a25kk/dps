@@ -35,6 +35,7 @@ module.exports = function (grunt) {
                   '<%= config.modules %>/modernizr/modernizr.js',
                   '<%= config.modules %>/bootstrap/dist/js/umd/utils.js',
                   '<%= config.modules %>/bootstrap/dist/js/umd/collapse.js',
+                  '<%= config.modules %>/bootstrap/dist/js/umd/dropdown.js',
                   '<%= config.modules %>/mailcheck/src/mailcheck.js',
                   '<%= config.modules %>/JVFloat/jvfloat.js',
                   '<%= config.modules %>/hideShowPassword/hideShowPassword.js',
@@ -57,6 +58,7 @@ module.exports = function (grunt) {
                 src: [
                     '<%= config.modules %>/bootstrap/dist/js/umd/utils.js',
                     '<%= config.modules %>/bootstrap/dist/js/umd/collapse.js',
+                    '<%= config.modules %>/bootstrap/dist/js/umd/dropdown.js',
                     '<%= config.modules %>/lazysizes/lazysizes.js',
                     '<%= config.modules %>/lazysizes/plugins/ls.parent-fit.js',
                     '<%= config.modules %>/respimage/respimage.js',
