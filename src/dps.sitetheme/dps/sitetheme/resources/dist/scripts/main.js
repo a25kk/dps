@@ -1,709 +1,10 @@
-require(['jquery'], function($) {'use strict';(function (global, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['exports', 'module', './util'], factory);
-  } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-    factory(exports, module, require('./util'));
-  } else {
-    var mod = {
-      exports: {}
-    };
-    factory(mod.exports, mod, global.Util);
-    global.collapse = mod.exports;
-  }
-})(this, function (exports, module, _util) {
-  'use strict';
-
-  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-  var _Util = _interopRequireDefault(_util);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v4.0.0-alpha.2): collapse.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-  var Collapse = (function ($) {
-
-    /**
-     * ------------------------------------------------------------------------
-     * Constants
-     * ------------------------------------------------------------------------
-     */
-
-    var NAME = 'collapse';
-    var VERSION = '4.0.0-alpha.2';
-    var DATA_KEY = 'bs.collapse';
-    var EVENT_KEY = '.' + DATA_KEY;
-    var DATA_API_KEY = '.data-api';
-    var JQUERY_NO_CONFLICT = $.fn[NAME];
-    var TRANSITION_DURATION = 600;
-
-    var Default = {
-      toggle: true,
-      parent: ''
-    };
-
-    var DefaultType = {
-      toggle: 'boolean',
-      parent: 'string'
-    };
-
-    var Event = {
-      SHOW: 'show' + EVENT_KEY,
-      SHOWN: 'shown' + EVENT_KEY,
-      HIDE: 'hide' + EVENT_KEY,
-      HIDDEN: 'hidden' + EVENT_KEY,
-      CLICK_DATA_API: 'click' + EVENT_KEY + DATA_API_KEY
-    };
-
-    var ClassName = {
-      IN: 'in',
-      COLLAPSE: 'collapse',
-      COLLAPSING: 'collapsing',
-      COLLAPSED: 'collapsed'
-    };
-
-    var Dimension = {
-      WIDTH: 'width',
-      HEIGHT: 'height'
-    };
-
-    var Selector = {
-      ACTIVES: '.panel > .in, .panel > .collapsing',
-      DATA_TOGGLE: '[data-toggle="collapse"]'
-    };
-
-    /**
-     * ------------------------------------------------------------------------
-     * Class Definition
-     * ------------------------------------------------------------------------
-     */
-
-    var Collapse = (function () {
-      function Collapse(element, config) {
-        _classCallCheck(this, Collapse);
-
-        this._isTransitioning = false;
-        this._element = element;
-        this._config = this._getConfig(config);
-        this._triggerArray = $.makeArray($('[data-toggle="collapse"][href="#' + element.id + '"],' + ('[data-toggle="collapse"][data-target="#' + element.id + '"]')));
-
-        this._parent = this._config.parent ? this._getParent() : null;
-
-        if (!this._config.parent) {
-          this._addAriaAndCollapsedClass(this._element, this._triggerArray);
-        }
-
-        if (this._config.toggle) {
-          this.toggle();
-        }
-      }
-
-      /**
-       * ------------------------------------------------------------------------
-       * Data Api implementation
-       * ------------------------------------------------------------------------
-       */
-
-      // getters
-
-      _createClass(Collapse, [{
-        key: 'toggle',
-
-        // public
-
-        value: function toggle() {
-          if ($(this._element).hasClass(ClassName.IN)) {
-            this.hide();
-          } else {
-            this.show();
-          }
-        }
-      }, {
-        key: 'show',
-        value: function show() {
-          var _this = this;
-
-          if (this._isTransitioning || $(this._element).hasClass(ClassName.IN)) {
-            return;
-          }
-
-          var actives = undefined;
-          var activesData = undefined;
-
-          if (this._parent) {
-            actives = $.makeArray($(Selector.ACTIVES));
-            if (!actives.length) {
-              actives = null;
-            }
-          }
-
-          if (actives) {
-            activesData = $(actives).data(DATA_KEY);
-            if (activesData && activesData._isTransitioning) {
-              return;
-            }
-          }
-
-          var startEvent = $.Event(Event.SHOW);
-          $(this._element).trigger(startEvent);
-          if (startEvent.isDefaultPrevented()) {
-            return;
-          }
-
-          if (actives) {
-            Collapse._jQueryInterface.call($(actives), 'hide');
-            if (!activesData) {
-              $(actives).data(DATA_KEY, null);
-            }
-          }
-
-          var dimension = this._getDimension();
-
-          $(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
-
-          this._element.style[dimension] = 0;
-          this._element.setAttribute('aria-expanded', true);
-
-          if (this._triggerArray.length) {
-            $(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
-          }
-
-          this.setTransitioning(true);
-
-          var complete = function complete() {
-            $(_this._element).removeClass(ClassName.COLLAPSING).addClass(ClassName.COLLAPSE).addClass(ClassName.IN);
-
-            _this._element.style[dimension] = '';
-
-            _this.setTransitioning(false);
-
-            $(_this._element).trigger(Event.SHOWN);
-          };
-
-          if (!_Util['default'].supportsTransitionEnd()) {
-            complete();
-            return;
-          }
-
-          var capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
-          var scrollSize = 'scroll' + capitalizedDimension;
-
-          $(this._element).one(_Util['default'].TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
-
-          this._element.style[dimension] = this._element[scrollSize] + 'px';
-        }
-      }, {
-        key: 'hide',
-        value: function hide() {
-          var _this2 = this;
-
-          if (this._isTransitioning || !$(this._element).hasClass(ClassName.IN)) {
-            return;
-          }
-
-          var startEvent = $.Event(Event.HIDE);
-          $(this._element).trigger(startEvent);
-          if (startEvent.isDefaultPrevented()) {
-            return;
-          }
-
-          var dimension = this._getDimension();
-          var offsetDimension = dimension === Dimension.WIDTH ? 'offsetWidth' : 'offsetHeight';
-
-          this._element.style[dimension] = this._element[offsetDimension] + 'px';
-
-          _Util['default'].reflow(this._element);
-
-          $(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.IN);
-
-          this._element.setAttribute('aria-expanded', false);
-
-          if (this._triggerArray.length) {
-            $(this._triggerArray).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
-          }
-
-          this.setTransitioning(true);
-
-          var complete = function complete() {
-            _this2.setTransitioning(false);
-            $(_this2._element).removeClass(ClassName.COLLAPSING).addClass(ClassName.COLLAPSE).trigger(Event.HIDDEN);
-          };
-
-          this._element.style[dimension] = 0;
-
-          if (!_Util['default'].supportsTransitionEnd()) {
-            complete();
-            return;
-          }
-
-          $(this._element).one(_Util['default'].TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
-        }
-      }, {
-        key: 'setTransitioning',
-        value: function setTransitioning(isTransitioning) {
-          this._isTransitioning = isTransitioning;
-        }
-      }, {
-        key: 'dispose',
-        value: function dispose() {
-          $.removeData(this._element, DATA_KEY);
-
-          this._config = null;
-          this._parent = null;
-          this._element = null;
-          this._triggerArray = null;
-          this._isTransitioning = null;
-        }
-
-        // private
-
-      }, {
-        key: '_getConfig',
-        value: function _getConfig(config) {
-          config = $.extend({}, Default, config);
-          config.toggle = Boolean(config.toggle); // coerce string values
-          _Util['default'].typeCheckConfig(NAME, config, DefaultType);
-          return config;
-        }
-      }, {
-        key: '_getDimension',
-        value: function _getDimension() {
-          var hasWidth = $(this._element).hasClass(Dimension.WIDTH);
-          return hasWidth ? Dimension.WIDTH : Dimension.HEIGHT;
-        }
-      }, {
-        key: '_getParent',
-        value: function _getParent() {
-          var _this3 = this;
-
-          var parent = $(this._config.parent)[0];
-          var selector = '[data-toggle="collapse"][data-parent="' + this._config.parent + '"]';
-
-          $(parent).find(selector).each(function (i, element) {
-            _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
-          });
-
-          return parent;
-        }
-      }, {
-        key: '_addAriaAndCollapsedClass',
-        value: function _addAriaAndCollapsedClass(element, triggerArray) {
-          if (element) {
-            var isOpen = $(element).hasClass(ClassName.IN);
-            element.setAttribute('aria-expanded', isOpen);
-
-            if (triggerArray.length) {
-              $(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
-            }
-          }
-        }
-
-        // static
-
-      }], [{
-        key: '_getTargetFromElement',
-        value: function _getTargetFromElement(element) {
-          var selector = _Util['default'].getSelectorFromElement(element);
-          return selector ? $(selector)[0] : null;
-        }
-      }, {
-        key: '_jQueryInterface',
-        value: function _jQueryInterface(config) {
-          return this.each(function () {
-            var $this = $(this);
-            var data = $this.data(DATA_KEY);
-            var _config = $.extend({}, Default, $this.data(), typeof config === 'object' && config);
-
-            if (!data && _config.toggle && /show|hide/.test(config)) {
-              _config.toggle = false;
-            }
-
-            if (!data) {
-              data = new Collapse(this, _config);
-              $this.data(DATA_KEY, data);
-            }
-
-            if (typeof config === 'string') {
-              if (data[config] === undefined) {
-                throw new Error('No method named "' + config + '"');
-              }
-              data[config]();
-            }
-          });
-        }
-      }, {
-        key: 'VERSION',
-        get: function get() {
-          return VERSION;
-        }
-      }, {
-        key: 'Default',
-        get: function get() {
-          return Default;
-        }
-      }]);
-
-      return Collapse;
-    })();
-
-    $(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
-      event.preventDefault();
-
-      var target = Collapse._getTargetFromElement(this);
-      var data = $(target).data(DATA_KEY);
-      var config = data ? 'toggle' : $(this).data();
-
-      Collapse._jQueryInterface.call($(target), config);
-    });
-
-    /**
-     * ------------------------------------------------------------------------
-     * jQuery
-     * ------------------------------------------------------------------------
-     */
-
-    $.fn[NAME] = Collapse._jQueryInterface;
-    $.fn[NAME].Constructor = Collapse;
-    $.fn[NAME].noConflict = function () {
-      $.fn[NAME] = JQUERY_NO_CONFLICT;
-      return Collapse._jQueryInterface;
-    };
-
-    return Collapse;
-  })(jQuery);
-
-  module.exports = Collapse;
-});
-
-(function (global, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['exports', 'module', './util'], factory);
-  } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-    factory(exports, module, require('./util'));
-  } else {
-    var mod = {
-      exports: {}
-    };
-    factory(mod.exports, mod, global.Util);
-    global.dropdown = mod.exports;
-  }
-})(this, function (exports, module, _util) {
-  'use strict';
-
-  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-  var _Util = _interopRequireDefault(_util);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v4.0.0-alpha.2): dropdown.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-  var Dropdown = (function ($) {
-
-    /**
-     * ------------------------------------------------------------------------
-     * Constants
-     * ------------------------------------------------------------------------
-     */
-
-    var NAME = 'dropdown';
-    var VERSION = '4.0.0-alpha.2';
-    var DATA_KEY = 'bs.dropdown';
-    var EVENT_KEY = '.' + DATA_KEY;
-    var DATA_API_KEY = '.data-api';
-    var JQUERY_NO_CONFLICT = $.fn[NAME];
-
-    var Event = {
-      HIDE: 'hide' + EVENT_KEY,
-      HIDDEN: 'hidden' + EVENT_KEY,
-      SHOW: 'show' + EVENT_KEY,
-      SHOWN: 'shown' + EVENT_KEY,
-      CLICK: 'click' + EVENT_KEY,
-      CLICK_DATA_API: 'click' + EVENT_KEY + DATA_API_KEY,
-      KEYDOWN_DATA_API: 'keydown' + EVENT_KEY + DATA_API_KEY
-    };
-
-    var ClassName = {
-      BACKDROP: 'dropdown-backdrop',
-      DISABLED: 'disabled',
-      OPEN: 'open'
-    };
-
-    var Selector = {
-      BACKDROP: '.dropdown-backdrop',
-      DATA_TOGGLE: '[data-toggle="dropdown"]',
-      FORM_CHILD: '.dropdown form',
-      ROLE_MENU: '[role="menu"]',
-      ROLE_LISTBOX: '[role="listbox"]',
-      NAVBAR_NAV: '.navbar-nav',
-      VISIBLE_ITEMS: '[role="menu"] li:not(.disabled) a, ' + '[role="listbox"] li:not(.disabled) a'
-    };
-
-    /**
-     * ------------------------------------------------------------------------
-     * Class Definition
-     * ------------------------------------------------------------------------
-     */
-
-    var Dropdown = (function () {
-      function Dropdown(element) {
-        _classCallCheck(this, Dropdown);
-
-        this._element = element;
-
-        this._addEventListeners();
-      }
-
-      /**
-       * ------------------------------------------------------------------------
-       * Data Api implementation
-       * ------------------------------------------------------------------------
-       */
-
-      // getters
-
-      _createClass(Dropdown, [{
-        key: 'toggle',
-
-        // public
-
-        value: function toggle() {
-          if (this.disabled || $(this).hasClass(ClassName.DISABLED)) {
-            return false;
-          }
-
-          var parent = Dropdown._getParentFromElement(this);
-          var isActive = $(parent).hasClass(ClassName.OPEN);
-
-          Dropdown._clearMenus();
-
-          if (isActive) {
-            return false;
-          }
-
-          if ('ontouchstart' in document.documentElement && !$(parent).closest(Selector.NAVBAR_NAV).length) {
-
-            // if mobile we use a backdrop because click events don't delegate
-            var dropdown = document.createElement('div');
-            dropdown.className = ClassName.BACKDROP;
-            $(dropdown).insertBefore(this);
-            $(dropdown).on('click', Dropdown._clearMenus);
-          }
-
-          var relatedTarget = { relatedTarget: this };
-          var showEvent = $.Event(Event.SHOW, relatedTarget);
-
-          $(parent).trigger(showEvent);
-
-          if (showEvent.isDefaultPrevented()) {
-            return false;
-          }
-
-          this.focus();
-          this.setAttribute('aria-expanded', 'true');
-
-          $(parent).toggleClass(ClassName.OPEN);
-          $(parent).trigger($.Event(Event.SHOWN, relatedTarget));
-
-          return false;
-        }
-      }, {
-        key: 'dispose',
-        value: function dispose() {
-          $.removeData(this._element, DATA_KEY);
-          $(this._element).off(EVENT_KEY);
-          this._element = null;
-        }
-
-        // private
-
-      }, {
-        key: '_addEventListeners',
-        value: function _addEventListeners() {
-          $(this._element).on(Event.CLICK, this.toggle);
-        }
-
-        // static
-
-      }], [{
-        key: '_jQueryInterface',
-        value: function _jQueryInterface(config) {
-          return this.each(function () {
-            var data = $(this).data(DATA_KEY);
-
-            if (!data) {
-              $(this).data(DATA_KEY, data = new Dropdown(this));
-            }
-
-            if (typeof config === 'string') {
-              if (data[config] === undefined) {
-                throw new Error('No method named "' + config + '"');
-              }
-              data[config].call(this);
-            }
-          });
-        }
-      }, {
-        key: '_clearMenus',
-        value: function _clearMenus(event) {
-          if (event && event.which === 3) {
-            return;
-          }
-
-          var backdrop = $(Selector.BACKDROP)[0];
-          if (backdrop) {
-            backdrop.parentNode.removeChild(backdrop);
-          }
-
-          var toggles = $.makeArray($(Selector.DATA_TOGGLE));
-
-          for (var i = 0; i < toggles.length; i++) {
-            var _parent = Dropdown._getParentFromElement(toggles[i]);
-            var relatedTarget = { relatedTarget: toggles[i] };
-
-            if (!$(_parent).hasClass(ClassName.OPEN)) {
-              continue;
-            }
-
-            if (event && event.type === 'click' && /input|textarea/i.test(event.target.tagName) && $.contains(_parent, event.target)) {
-              continue;
-            }
-
-            var hideEvent = $.Event(Event.HIDE, relatedTarget);
-            $(_parent).trigger(hideEvent);
-            if (hideEvent.isDefaultPrevented()) {
-              continue;
-            }
-
-            toggles[i].setAttribute('aria-expanded', 'false');
-
-            $(_parent).removeClass(ClassName.OPEN).trigger($.Event(Event.HIDDEN, relatedTarget));
-          }
-        }
-      }, {
-        key: '_getParentFromElement',
-        value: function _getParentFromElement(element) {
-          var parent = undefined;
-          var selector = _Util['default'].getSelectorFromElement(element);
-
-          if (selector) {
-            parent = $(selector)[0];
-          }
-
-          return parent || element.parentNode;
-        }
-      }, {
-        key: '_dataApiKeydownHandler',
-        value: function _dataApiKeydownHandler(event) {
-          if (!/(38|40|27|32)/.test(event.which) || /input|textarea/i.test(event.target.tagName)) {
-            return;
-          }
-
-          event.preventDefault();
-          event.stopPropagation();
-
-          if (this.disabled || $(this).hasClass(ClassName.DISABLED)) {
-            return;
-          }
-
-          var parent = Dropdown._getParentFromElement(this);
-          var isActive = $(parent).hasClass(ClassName.OPEN);
-
-          if (!isActive && event.which !== 27 || isActive && event.which === 27) {
-
-            if (event.which === 27) {
-              var toggle = $(parent).find(Selector.DATA_TOGGLE)[0];
-              $(toggle).trigger('focus');
-            }
-
-            $(this).trigger('click');
-            return;
-          }
-
-          var items = $.makeArray($(Selector.VISIBLE_ITEMS));
-
-          items = items.filter(function (item) {
-            return item.offsetWidth || item.offsetHeight;
-          });
-
-          if (!items.length) {
-            return;
-          }
-
-          var index = items.indexOf(event.target);
-
-          if (event.which === 38 && index > 0) {
-            // up
-            index--;
-          }
-
-          if (event.which === 40 && index < items.length - 1) {
-            // down
-            index++;
-          }
-
-          if (index < 0) {
-            index = 0;
-          }
-
-          items[index].focus();
-        }
-      }, {
-        key: 'VERSION',
-        get: function get() {
-          return VERSION;
-        }
-      }]);
-
-      return Dropdown;
-    })();
-
-    $(document).on(Event.KEYDOWN_DATA_API, Selector.DATA_TOGGLE, Dropdown._dataApiKeydownHandler).on(Event.KEYDOWN_DATA_API, Selector.ROLE_MENU, Dropdown._dataApiKeydownHandler).on(Event.KEYDOWN_DATA_API, Selector.ROLE_LISTBOX, Dropdown._dataApiKeydownHandler).on(Event.CLICK_DATA_API, Dropdown._clearMenus).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, Dropdown.prototype.toggle).on(Event.CLICK_DATA_API, Selector.FORM_CHILD, function (e) {
-      e.stopPropagation();
-    });
-
-    /**
-     * ------------------------------------------------------------------------
-     * jQuery
-     * ------------------------------------------------------------------------
-     */
-
-    $.fn[NAME] = Dropdown._jQueryInterface;
-    $.fn[NAME].Constructor = Dropdown;
-    $.fn[NAME].noConflict = function () {
-      $.fn[NAME] = JQUERY_NO_CONFLICT;
-      return Dropdown._jQueryInterface;
-    };
-
-    return Dropdown;
-  })(jQuery);
-
-  module.exports = Dropdown;
-});
-
-(function(window, factory) {
+require(['jquery'], function($) {'use strict';(function(window, factory) {
 	var lazySizes = factory(window, window.document);
 	window.lazySizes = lazySizes;
 	if(typeof module == 'object' && module.exports){
 		module.exports = lazySizes;
-	} else if (typeof define == 'function' && define.amd) {
-		define(lazySizes);
 	}
-}(window, function(window, document) {
+}(window, function l(window, document) {
 	'use strict';
 	/*jshint eqnull:true */
 	if(!document.getElementsByClassName){return;}
@@ -712,7 +13,9 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 
 	var docElem = document.documentElement;
 
-	var supportPicture = window.HTMLPictureElement && ('sizes' in document.createElement('img'));
+	var Date = window.Date;
+
+	var supportPicture = window.HTMLPictureElement;
 
 	var _addEventListener = 'addEventListener';
 
@@ -722,7 +25,9 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 
 	var setTimeout = window.setTimeout;
 
-	var rAF = window.requestAnimationFrame || setTimeout;
+	var requestAnimationFrame = window.requestAnimationFrame || setTimeout;
+
+	var requestIdleCallback = window.requestIdleCallback;
 
 	var regPicture = /^picture$/i;
 
@@ -795,74 +100,77 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 		return width;
 	};
 
-	var throttle = function(fn){
-		var running;
-		var lastTime = 0;
-		var Date = window.Date;
+	var rAF = (function(){
+		var running, waiting;
+		var fns = [];
+
 		var run = function(){
+			var fn;
+			running = true;
+			waiting = false;
+			while(fns.length){
+				fn = fns.shift();
+				fn[0].apply(fn[1], fn[2]);
+			}
 			running = false;
-			lastTime = Date.now();
-			fn();
-		};
-		var afterAF = function(){
-			setTimeout(run);
-		};
-		var getAF = function(){
-			rAF(afterAF);
 		};
 
-		return function(){
+		return function(fn){
 			if(running){
-				return;
-			}
-			var delay = 125 - (Date.now() - lastTime);
+				fn.apply(this, arguments);
+			} else {
+				fns.push([fn, this, arguments]);
 
-			running =  true;
-
-			if(delay < 6){
-				delay = 6;
+				if(!waiting){
+					waiting = true;
+					(document.hidden ? setTimeout : requestAnimationFrame)(run);
+				}
 			}
-			setTimeout(getAF, delay);
 		};
+	})();
+
+	var rAFIt = function(fn, simple){
+		return simple ?
+			function() {
+				rAF(fn);
+			} :
+			function(){
+				var that = this;
+				var args = arguments;
+				rAF(function(){
+					fn.apply(that, args);
+				});
+			}
+		;
 	};
 
-	/*
 	var throttle = function(fn){
 		var running;
 		var lastTime = 0;
-		var Date = window.Date;
-		var requestIdleCallback = window.requestIdleCallback;
 		var gDelay = 125;
-		var dTimeout = 999;
-		var timeout = dTimeout;
-		var fastCallThreshold = 0;
+		var RIC_DEFAULT_TIMEOUT = 999;
+		var rICTimeout = RIC_DEFAULT_TIMEOUT;
 		var run = function(){
 			running = false;
 			lastTime = Date.now();
 			fn();
 		};
-		var afterAF = function(){
-			setTimeout(run);
-		};
-		var getAF = function(){
-			rAF(afterAF);
-		};
-
-		if(requestIdleCallback){
-			gDelay = 66;
-			fastCallThreshold = 22;
-			getAF = function(){
-				requestIdleCallback(run, {timeout: timeout});
-				if(timeout !== dTimeout){
-					timeout = dTimeout;
+		var idleCallback = requestIdleCallback ?
+			function(){
+				requestIdleCallback(run, {timeout: rICTimeout});
+				if(rICTimeout !== RIC_DEFAULT_TIMEOUT){
+					rICTimeout = RIC_DEFAULT_TIMEOUT;
 				}
-			};
-		}
+			}:
+			rAFIt(function(){
+				setTimeout(run);
+			}, true)
+		;
 
 		return function(isPriority){
 			var delay;
 			if((isPriority = isPriority === true)){
-				timeout = 40;
+				rICTimeout = 66;
 			}
 
 			if(running){
@@ -871,14 +179,47 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 
 			running =  true;
 
-			if(isPriority || (delay = gDelay - (Date.now() - lastTime)) < fastCallThreshold){
-				getAF();
+			delay = gDelay - (Date.now() - lastTime);
+
+			if(delay < 0){
+				delay = 0;
+			}
+
+			if(isPriority || (delay < 9 && requestIdleCallback)){
+				idleCallback();
 			} else {
-				setTimeout(getAF, delay);
+				setTimeout(idleCallback, delay);
 			}
 		};
 	};
-	*/
+
+	//based on http://modernjavascript.blogspot.de/2013/08/building-better-debounce.html
+	var debounce = function(func) {
+		var timeout, timestamp;
+		var wait = 99;
+		var run = function(){
+			timeout = null;
+			func();
+		};
+		var later = function() {
+			var last = Date.now() - timestamp;
+
+			if (last < wait) {
+				setTimeout(later, wait - last);
+			} else {
+				(requestIdleCallback || run)(run);
+			}
+		};
+
+		return function() {
+			timestamp = Date.now();
+
+			if (!timeout) {
+				timeout = setTimeout(later, wait);
+			}
+		};
+	};
+
 
 	var loader = (function(){
 		var lazyloadElems, preloadElems, isCompleted, resetPreloadingTimer, loadMode, started;
@@ -925,9 +266,9 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 				if(visible && getCSS(parent, 'overflow') != 'visible'){
 					outerRect = parent.getBoundingClientRect();
 					visible = eLright > outerRect.left &&
-					eLleft < outerRect.right &&
-					eLbottom > outerRect.top - 1 &&
-					eLtop < outerRect.bottom + 1
+						eLleft < outerRect.right &&
+						eLbottom > outerRect.top - 1 &&
+						eLtop < outerRect.bottom + 1
 					;
 				}
 			}
@@ -946,7 +287,7 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 
 				if(preloadExpand == null){
 					if(!('expand' in lazySizesConfig)){
-						lazySizesConfig.expand = docElem.clientHeight > 600 ? docElem.clientWidth > 860 ? 500 : 410 : 359;
+						lazySizesConfig.expand = docElem.clientHeight > 500 ? 500 : 400;
 					}
 
 					defaultExpand = lazySizesConfig.expand;
@@ -1009,7 +350,11 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 		var switchLoadingClass = function(e){
 			addClass(e.target, lazySizesConfig.loadedClass);
 			removeClass(e.target, lazySizesConfig.loadingClass);
-			addRemoveLoadEvents(e.target, switchLoadingClass);
+			addRemoveLoadEvents(e.target, rafSwitchLoadingClass);
+		};
+		var rafedSwitchLoadingClass = rAFIt(switchLoadingClass);
+		var rafSwitchLoadingClass = function(e){
+			rafedSwitchLoadingClass({target: e.target});
 		};
 
 		var changeIframeSrc = function(elem, src){
@@ -1041,98 +386,63 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 			}
 		};
 
-		var rafBatch = (function(){
-			var isRunning;
-			var batch = [];
-			var runBatch = function(){
-				while(batch.length){
-					(batch.shift())();
+		var lazyUnveil = rAFIt(function (elem, detail, isAuto, sizes, isImg){
+			var src, srcset, parent, isPicture, event, firesLoad;
+
+			if(!(event = triggerEvent(elem, 'lazybeforeunveil', detail)).defaultPrevented){
+
+				if(sizes){
+					if(isAuto){
+						addClass(elem, lazySizesConfig.autosizesClass);
+					} else {
+						elem.setAttribute('sizes', sizes);
+					}
 				}
-				isRunning = false;
-			};
-			return function(fn){
-				batch.push(fn);
-				if(!isRunning){
-					isRunning = true;
-					rAF(runBatch);
+
+				srcset = elem[_getAttribute](lazySizesConfig.srcsetAttr);
+				src = elem[_getAttribute](lazySizesConfig.srcAttr);
+
+				if(isImg) {
+					parent = elem.parentNode;
+					isPicture = parent && regPicture.test(parent.nodeName || '');
 				}
-			};
-		})();
 
-		var unveilElement = function (elem){
-			var src, srcset, parent, isPicture, event, firesLoad, width;
+				firesLoad = detail.firesLoad || (('src' in elem) && (srcset || src || isPicture));
 
-			var isImg = regImg.test(elem.nodeName);
+				event = {target: elem};
 
-			//allow using sizes="auto", but don't use. it's invalid. Use data-sizes="auto" or a valid value for sizes instead (i.e.: sizes="80vw")
-			var sizes = isImg && (elem[_getAttribute](lazySizesConfig.sizesAttr) || elem[_getAttribute]('sizes'));
-			var isAuto = sizes == 'auto';
+				if(firesLoad){
+					addRemoveLoadEvents(elem, resetPreloading, true);
+					clearTimeout(resetPreloadingTimer);
+					resetPreloadingTimer = setTimeout(resetPreloading, 2500);
 
-			if( (isAuto || !isCompleted) && isImg && (elem.src || elem.srcset) && !elem.complete && !hasClass(elem, lazySizesConfig.errorClass)){return;}
+					addClass(elem, lazySizesConfig.loadingClass);
+					addRemoveLoadEvents(elem, rafSwitchLoadingClass, true);
+				}
 
-			if(isAuto){
-				width = elem.offsetWidth;
+				if(isPicture){
+					forEach.call(parent.getElementsByTagName('source'), handleSources);
+				}
+
+				if(srcset){
+					elem.setAttribute('srcset', srcset);
+				} else if(src && !isPicture){
+					if(regIframe.test(elem.nodeName)){
+						changeIframeSrc(elem, src);
+					} else {
+						elem.src = src;
+					}
+				}
+
+				if(srcset || isPicture){
+					updatePolyfill(elem, {src: src});
+				}
 			}
 
-			elem._lazyRace = true;
-			isLoading++;
-
-			rafBatch(function lazyUnveil(){
+			rAF(function(){
 				if(elem._lazyRace){
 					delete elem._lazyRace;
 				}
-
-				if(!(event = triggerEvent(elem, 'lazybeforeunveil')).defaultPrevented){
-
-					if(sizes){
-						if(isAuto){
-							autoSizer.updateElem(elem, true, width);
-							addClass(elem, lazySizesConfig.autosizesClass);
-						} else {
-							elem.setAttribute('sizes', sizes);
-						}
-					}
-
-					srcset = elem[_getAttribute](lazySizesConfig.srcsetAttr);
-					src = elem[_getAttribute](lazySizesConfig.srcAttr);
-
-					if(isImg) {
-						parent = elem.parentNode;
-						isPicture = parent && regPicture.test(parent.nodeName || '');
-					}
-
-					firesLoad = event.detail.firesLoad || (('src' in elem) && (srcset || src || isPicture));
-
-					event = {target: elem};
-
-					if(firesLoad){
-						addRemoveLoadEvents(elem, resetPreloading, true);
-						clearTimeout(resetPreloadingTimer);
-						resetPreloadingTimer = setTimeout(resetPreloading, 2500);
-
-						addClass(elem, lazySizesConfig.loadingClass);
-						addRemoveLoadEvents(elem, switchLoadingClass, true);
-					}
-
-					if(isPicture){
-						forEach.call(parent.getElementsByTagName('source'), handleSources);
-					}
-
-					if(srcset){
-						elem.setAttribute('srcset', srcset);
-					} else if(src && !isPicture){
-						if(regIframe.test(elem.nodeName)){
-							changeIframeSrc(elem, src);
-						} else {
-							elem.src = src;
-						}
-					}
-
-					if(srcset || isPicture){
-						updatePolyfill(elem, {src: src});
-					}
-				}
-
 				removeClass(elem, lazySizesConfig.lazyClass);
 
 				if( !firesLoad || elem.complete ){
@@ -1144,6 +454,29 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 					switchLoadingClass(event);
 				}
 			});
+		});
+
+		var unveilElement = function (elem){
+			var detail;
+
+			var isImg = regImg.test(elem.nodeName);
+
+			//allow using sizes="auto", but don't use. it's invalid. Use data-sizes="auto" or a valid value for sizes instead (i.e.: sizes="80vw")
+			var sizes = isImg && (elem[_getAttribute](lazySizesConfig.sizesAttr) || elem[_getAttribute]('sizes'));
+			var isAuto = sizes == 'auto';
+
+			if( (isAuto || !isCompleted) && isImg && (elem.src || elem.srcset) && !elem.complete && !hasClass(elem, lazySizesConfig.errorClass)){return;}
+
+			detail = triggerEvent(elem, 'lazyunveilread').detail;
+
+			if(isAuto){
+				 autoSizer.updateElem(elem, true, elem.offsetWidth);
+			}
+
+			elem._lazyRace = true;
+			isLoading++;
+
+			lazyUnveil(elem, detail, isAuto, sizes, isImg);
 		};
 
 		var onload = function(){
@@ -1152,67 +485,24 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 				setTimeout(onload, 999);
 				return;
 			}
-			var scrollTimer;
-			var afterScroll = function(){
+			var afterScroll = debounce(function(){
 				lazySizesConfig.loadMode = 3;
 				throttledCheckElements();
-			};
+			});
 
 			isCompleted = true;
 
 			lazySizesConfig.loadMode = 3;
 
-			if(!isLoading){
-				if(lowRuns){
-					throttledCheckElements();
-				} else {
-					setTimeout(checkElements);
-				}
-			}
+			throttledCheckElements();
 
 			addEventListener('scroll', function(){
 				if(lazySizesConfig.loadMode == 3){
 					lazySizesConfig.loadMode = 2;
 				}
-				clearTimeout(scrollTimer);
-				scrollTimer = setTimeout(afterScroll, 99);
+				afterScroll();
 			}, true);
 		};
-
-		/*
-		var onload = function(){
-			var scrollTimer, timestamp;
-			var wait = 99;
-			var afterScroll = function(){
-				var last = (Date.now()) - timestamp;
-
-				// if the latest call was less that the wait period ago
-				// then we reset the timeout to wait for the difference
-				if (last < wait) {
-					scrollTimer = setTimeout(afterScroll, wait - last);
-
-					// or if not we can null out the timer and run the latest
-				} else {
-					scrollTimer = null;
-					lazySizesConfig.loadMode = 3;
-					throttledCheckElements();
-				}
-			};
-
-			isCompleted = true;
-			lowRuns += 8;
-
-			lazySizesConfig.loadMode = 3;
-
-			addEventListener('scroll', function(){
-				timestamp = Date.now();
-				if(!scrollTimer){
-					lazySizesConfig.loadMode = 2;
-					scrollTimer = setTimeout(afterScroll, wait);
-				}
-			}, true);
-		};
-		*/
 
 		return {
 			_: function(){
@@ -1260,8 +550,26 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 	var autoSizer = (function(){
 		var autosizesElems;
 
-		var sizeElement = function (elem, dataAttr, width){
-			var sources, i, len, event;
+		var sizeElement = rAFIt(function(elem, parent, event, width){
+			var sources, i, len;
+			elem._lazysizesWidth = width;
+			width += 'px';
+
+			elem.setAttribute('sizes', width);
+
+			if(regPicture.test(parent.nodeName || '')){
+				sources = parent.getElementsByTagName('source');
+				for(i = 0, len = sources.length; i < len; i++){
+					sources[i].setAttribute('sizes', width);
+				}
+			}
+
+			if(!event.detail.dataAttr){
+				updatePolyfill(elem, event.detail);
+			}
+		});
+		var getSizeElement = function (elem, dataAttr, width){
+			var event;
 			var parent = elem.parentNode;
 
 			if(parent){
@@ -1272,20 +580,7 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 					width = event.detail.width;
 
 					if(width && width !== elem._lazysizesWidth){
-						elem._lazysizesWidth = width;
-						width += 'px';
-						elem.setAttribute('sizes', width);
-
-						if(regPicture.test(parent.nodeName || '')){
-							sources = parent.getElementsByTagName('source');
-							for(i = 0, len = sources.length; i < len; i++){
-								sources[i].setAttribute('sizes', width);
-							}
-						}
-
-						if(!event.detail.dataAttr){
-							updatePolyfill(elem, event.detail);
-						}
+						sizeElement(elem, parent, event, width);
 					}
 				}
 			}
@@ -1298,20 +593,20 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 				i = 0;
 
 				for(; i < len; i++){
-					sizeElement(autosizesElems[i]);
+					getSizeElement(autosizesElems[i]);
 				}
 			}
 		};
 
-		var throttledUpdateElementsSizes = throttle(updateElementsSizes);
+		var debouncedUpdateElementsSizes = debounce(updateElementsSizes);
 
 		return {
 			_: function(){
 				autosizesElems = document.getElementsByClassName(lazySizesConfig.autosizesClass);
-				addEventListener('resize', throttledUpdateElementsSizes);
+				addEventListener('resize', debouncedUpdateElementsSizes);
 			},
-			checkElems: throttledUpdateElementsSizes,
-			updateElem: sizeElement
+			checkElems: debouncedUpdateElementsSizes,
+			updateElem: getSizeElement
 		};
 	})();
 
@@ -1341,7 +636,7 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 			minSize: 40,
 			customMedia: {},
 			init: true,
-			expFactor: 1.7,
+			expFactor: 1.5,
 			hFac: 0.8,
 			loadMode: 2
 		};
@@ -1373,9 +668,11 @@ require(['jquery'], function($) {'use strict';(function (global, factory) {
 		rC: removeClass,
 		hC: hasClass,
 		fire: triggerEvent,
-		gW: getWidth
+		gW: getWidth,
+		rAF: rAF,
 	};
-}));
+}
+));
 
 /*! respimage - v1.4.2 - 2015-08-22
  Licensed MIT */
