@@ -26,6 +26,25 @@
       layer="..interfaces.IDpsSitecontentLayer"
       />
 
+  <!-- Content page image gallery -->
+  <browser:page
+      for="dps.sitecontent.contentpage.IContentPage"
+      name="gallery-view"
+      class=".contentpage.GalleryView"
+      template="galleryview.pt"
+      permission="zope2.View"
+      layer="..interfaces.IDpsSitecontentLayer"
+      />
+
+  <browser:page
+      for="dps.sitecontent.contentpage.IContentPage"
+      name="gallery-preview"
+      class=".contentpage.GalleryPreview"
+      template="gallerypreview.pt"
+      permission="zope2.View"
+      layer="..interfaces.IDpsSitecontentLayer"
+      />
+
   <!-- Frontpage Views -->
   <browser:page
       for="plone.app.layout.navigation.interfaces.INavigationRoot"
