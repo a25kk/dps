@@ -14,13 +14,10 @@
     <theme href="dist/signin/index.html" css:if-content="body.template-pwreset_finish" />
     <theme href="dist/frontpage/index.html" css:if-content="body.template-frontpage-view" />
     <theme href="dist/partner/index.html" css:if-content="body.subsection-kooperationspartner" />
+    <theme href="dist/dekra/index.html" css:if-content="body.subsection-berufsfachschule-fuer-altenpflege" />
+    <theme href="dist/dekra/index.html" css:if-content="body.subsection-berufsfachschule-fuer-altenpflegehilfe" />
     <theme href="dist/index.html" css:if-content="body.portaltype-dps-sitecontent-contentpage" />
-
     <theme href="dist/full/index.html" css:if-content="body.template-search" />
-    
-
-
-
 
 <!-- Rules applying to a standard Plone web page -->
     <rules css:if-content="#visual-portal-wrapper">
