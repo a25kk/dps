@@ -14430,6 +14430,11 @@ body.template-frontpage-view .app-pathbar
 
 .partner-card-47
 {
+    background: #fff url('../assets/img/partner-47.jpg') no-repeat scroll center center;
+}
+
+.partner-card-dekra
+{
     min-height: 380px;
     margin-bottom: 1rem; 
 

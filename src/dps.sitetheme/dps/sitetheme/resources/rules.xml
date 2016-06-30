@@ -20,7 +20,10 @@
     <theme href="dist/index.html" css:if-content="body.subsection-stellenangebote" />
     <theme href="dist/dekra/index.html" css:if-content="body.subsection-berufsfachschule-fuer-altenpflege" />
     <theme href="dist/dekra/index.html" css:if-content="body.subsection-berufsfachschule-fuer-altenpflegehilfe" />
+    <theme href="dist/practical/index.html" css:if-content="body.subsection-praktische-ausbildung" />
     <theme href="dist/dekra/index.html" css:if-content="body.section-berufsfachschulen-fuer-altenpflege-und-altenpflegehilfe" />
+
+    
 
     <theme href="dist/index.html" css:if-content="body.portaltype-dps-sitecontent-contentpage" />
     <theme href="dist/full/index.html" css:if-content="body.template-search" />

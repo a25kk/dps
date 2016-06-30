@@ -18,14 +18,13 @@
     <section class="app-content">
         <aside class="app-content-aside">
             {% include layout/sidebar.html %}
-            {% include cards/partner-card-dekra.html %}
         </aside>
         <article class="app-content-main">
             {{ content }}
         </article>
     </section>
 </main>
-
+    {% include components/practical.html %}
     {% include layout/footer.html %}
     {% include base/javascript.html %}
     <div class="app-js-slot">
