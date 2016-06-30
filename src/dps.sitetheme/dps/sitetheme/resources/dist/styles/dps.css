@@ -14428,6 +14428,15 @@ body.template-frontpage-view .app-pathbar
     background: #fff url('../assets/img/partner-46.jpg') no-repeat scroll center center;
 }
 
+.partner-card-47
+{
+    min-height: 380px;
+    margin-bottom: 1rem; 
+
+    background: #fff url('../assets/img/dekra.jpg') no-repeat scroll top center;
+    background-size: contain;
+}
+
 .app-layout-simple
 {
     background: #373a3c;
