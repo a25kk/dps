@@ -5,11 +5,12 @@
 .app-gallery {
     height: 220px;
     overflow: hidden;
+    margin-bottom: $spacer;
         @include media-breakpoint-up(sm) {
             height: 380px;
         }
         @include media-breakpoint-up(md) {
-            height: 600px;
+            height: 520px;
         }
         .flickity-page-dots {
             display: none;
@@ -41,7 +42,7 @@
             height: 380px;
         }
         @include media-breakpoint-up(md) {
-            height: 600px;
+            height: 520px;
         }
         img {
             width: 100%;
