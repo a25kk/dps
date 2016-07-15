@@ -6,10 +6,10 @@
     height: 220px;
     overflow: hidden;
     margin-bottom: $spacer;
-        @include media-breakpoint-up(sm) {
-            height: 380px;
-        }
         @include media-breakpoint-up(md) {
+            height: 320px;
+        }
+        @include media-breakpoint-up(lg) {
             height: 520px;
         }
         .flickity-page-dots {
@@ -38,10 +38,10 @@
     width: 100%;
     height: 220px;
     overflow: hidden;
-        @include media-breakpoint-up(sm) {
-            height: 380px;
-        }
         @include media-breakpoint-up(md) {
+            height: 320px;
+        }
+        @include media-breakpoint-up(lg) {
             height: 520px;
         }
         img {

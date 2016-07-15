@@ -14427,14 +14427,14 @@ body.template-frontpage-view .app-pathbar
     height: 220px;
     margin-bottom: 1rem;
 }
-@media (min-width: 544px)
+@media (min-width: 768px)
 {
     .app-gallery
     {
-        height: 380px;
+        height: 320px;
     }
 }
-@media (min-width: 768px)
+@media (min-width: 992px)
 {
     .app-gallery
     {
@@ -14478,14 +14478,14 @@ body.template-frontpage-view .app-pathbar
     width: 100%;
     height: 220px;
 }
-@media (min-width: 544px)
+@media (min-width: 768px)
 {
     .app-gallery-cell
     {
-        height: 380px;
+        height: 320px;
     }
 }
-@media (min-width: 768px)
+@media (min-width: 992px)
 {
     .app-gallery-cell
     {
