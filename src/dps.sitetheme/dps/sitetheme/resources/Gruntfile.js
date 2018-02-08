@@ -59,8 +59,7 @@ module.exports = function (grunt) {
                     "'<%= config.diazoPrefix %>/<%= config.dist %>/scripts/ls.parent-fit.js',\n" +
                     "'<%= config.diazoPrefix %>/<%= config.dist %>/scripts/lazysizes-umd.js',\n" +
                     "'<%= config.diazoPrefix %>/<%= config.dist %>/scripts/a25.js',\n" +
-                    "'<%= config.diazoPrefix %>/<%= config.dist %>/scripts/a25.helpers.js',\n" +
-                    "'<%= config.diazoPrefix %>/<%= config.dist %>/scripts/a25.navbar.js',],\n" +
+                    "'<%= config.diazoPrefix %>/<%= config.dist %>/scripts/a25.helpers.js',],\n" +
                     " function(require, Flickity) {\n'use strict';\n",
                     footer: "});",
                     stripBanners: true

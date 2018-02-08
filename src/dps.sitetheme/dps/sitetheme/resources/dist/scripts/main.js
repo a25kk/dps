@@ -7,8 +7,7 @@ requirejs(['require',
 '/++theme++dps.sitetheme/dist/scripts/ls.parent-fit.js',
 '/++theme++dps.sitetheme/dist/scripts/lazysizes-umd.js',
 '/++theme++dps.sitetheme/dist/scripts/a25.js',
-'/++theme++dps.sitetheme/dist/scripts/a25.helpers.js',
-'/++theme++dps.sitetheme/dist/scripts/a25.navbar.js',],
+'/++theme++dps.sitetheme/dist/scripts/a25.helpers.js',],
  function(require, Flickity) {
 'use strict';
 if (typeof a25 == 'undefined') {
