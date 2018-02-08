@@ -51,7 +51,7 @@
                  tal:attributes="value st;"
                  />
           <span class="input-group-btn">
-            <input class="searchPage allowMultiSubmit btn btn-primary" type="submit"
+            <input class="searchPage allowMultiSubmit button btn-primary" type="submit"
                    value="Search"
                    i18n:attributes="value label_search;" />
           </span>
