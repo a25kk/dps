@@ -7444,8 +7444,7 @@ input.is-invalid[type='color'] ~ .invalid-tooltip,
     {
         display: inline-block;
     }
-    .form-inline .input-group,
-    .form-inline .custom-select
+    .form-inline .input-group
     {
         width: auto;
     }
