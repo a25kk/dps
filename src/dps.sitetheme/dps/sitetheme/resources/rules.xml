@@ -23,7 +23,7 @@
     <theme href="dist/practical/index.html" css:if-content="body.subsection-praktische-ausbildung" />
     <theme href="dist/dekra/index.html" css:if-content="body.section-berufsfachschulen-fuer-altenpflege-und-altenpflegehilfe" />
 
-    
+
 
     <theme href="dist/index.html" css:if-content="body.portaltype-dps-sitecontent-contentpage" />
     <theme href="dist/full/index.html" css:if-content="body.template-search" />
@@ -34,26 +34,23 @@
         <notheme if="$ajax_load" />
         <theme href="dist/index.html" />
 
-        <replace css:theme="title" css:content="title" />
+         <replace css:theme="title" css:content="title" />
         <after theme="/html/head/title" css:content="base" />
         <!-- Add meta tags -->
-        <drop theme="/html/head/meta" />
-
+        <drop css:content="meta[name='viewport']" />
         <before content="/html/head/meta" theme="/html/head/title" />
 
+       <after
+            content="/html/head/link | /html/head/style | /html/head/script"
+            theme-children="/html/head"
+        />
+
        <rules css:if-content="body.userrole-authenticated">
-            <!-- Copy style, script and link tags in the order they appear in the content -->
-            <after
-                content="/html/head/style | /html/head/script | /html/head/link"
-                theme-children="/html/head"
-                />
-
+           <!-- Drop style tags from theme template -->
             <drop theme="/html/head/style" />
-            <drop theme="/html/head/link" />
-
-            <!-- Drop scripts from theme footer if present -->
-            <drop theme="/html/body/script" />
         </rules>
+
+        <drop theme="/html/body/script" />
 
         <!-- Custom favicon implementation -->
         <drop css:content="head link[rel='apple-touch-icon']" />
