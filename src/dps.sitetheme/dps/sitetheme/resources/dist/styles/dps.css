@@ -7444,7 +7444,8 @@ input.is-invalid[type='color'] ~ .invalid-tooltip,
     {
         display: inline-block;
     }
-    .form-inline .input-group
+    .form-inline .input-group,
+    .form-inline .custom-select
     {
         width: auto;
     }
@@ -16403,6 +16404,14 @@ body.template-frontpage-view .app-pathbar
 {
     background-image: url('../assets/img/card-03-bg.jpg');
 }
+.app-card-banner-04
+{
+    background-image: url('../assets/img/card-04-bg.jpg');
+}
+.app-card-banner-05
+{
+    background-image: url('../assets/img/card-05-bg.jpg');
+}
 
 .app-card-placeholder
 {
@@ -16523,11 +16532,11 @@ body.template-frontpage-view .app-pathbar
     }
 }
 
-.card-quick .logo-pray
+.card-quick .logo-add
 {
-    width: 86px;
-    height: 89px;
-    margin: 0 auto !important;
+    width: 60px;
+    height: 60px;
+    margin: .5rem auto 1.1rem auto !important;
 }
 
 .card-quick .subcard-tr
@@ -16590,12 +16599,11 @@ body.template-frontpage-view .app-pathbar
     }
 }
 
-.card-quick .logo-parking
+.card-quick .logo-offer
 {
-    width: 86px;
-    height: 89px;
-    margin: 0 auto !important;
-    padding-top: 1rem;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1rem auto !important;
 }
 
 .app-nav-list,

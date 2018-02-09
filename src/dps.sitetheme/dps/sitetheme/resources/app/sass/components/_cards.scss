@@ -189,6 +189,12 @@ $card-title-spacers: (
     &-03 {
         background-image: url("../assets/img/card-03-bg.jpg");
     }
+    &-04 {
+        background-image: url("../assets/img/card-04-bg.jpg");
+    }
+    &-05 {
+        background-image: url("../assets/img/card-05-bg.jpg");
+    }
 }
 
 
@@ -264,7 +270,7 @@ $card-title-spacers: (
         opacity: 0.6;       
     }
 
-//** quick / Subcard pray
+//** quick / Subcard add
 
 .subcard-tl {
     text-align: center;
@@ -274,10 +280,10 @@ $card-title-spacers: (
             border-width: 0 0 2px 0;
         }
 }
-.logo-pray {
-    width: 86px;
-    height: 89px;
-    margin: 0 auto !important;
+.logo-add {
+    width: 60px;
+    height: 60px;
+    margin: .5rem auto 1.1rem auto !important;
 }
 
 
@@ -327,10 +333,9 @@ $card-title-spacers: (
     }
 }
 
-.logo-parking {
-    width: 86px;
-    height: 89px;
-    margin: 0 auto !important;
-    padding-top: 1rem;
+.logo-offer {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1rem auto !important;
     }
 }
