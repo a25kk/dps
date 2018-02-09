@@ -13,18 +13,7 @@
     <theme href="dist/signin/index.html" css:if-content="body.template-pwreset_form" />
     <theme href="dist/signin/index.html" css:if-content="body.template-pwreset_finish" />
     <theme href="dist/frontpage/index.html" css:if-content="body.template-frontpage-view" />
-    <theme href="dist/partner/index.html" css:if-content="body.subsection-kooperationspartner" />
-    <theme href="dist/index.html" css:if-content="body.subsection-wir" />
-    <theme href="dist/index.html" css:if-content="body.subsection-fortbildungen" />
-    <theme href="dist/index.html" css:if-content="body.subsection-aktuelles" />
-    <theme href="dist/index.html" css:if-content="body.subsection-stellenangebote" />
-    <theme href="dist/dekra/index.html" css:if-content="body.subsection-berufsfachschule-fuer-altenpflege" />
-    <theme href="dist/dekra/index.html" css:if-content="body.subsection-berufsfachschule-fuer-altenpflegehilfe" />
-    <theme href="dist/practical/index.html" css:if-content="body.subsection-praktische-ausbildung" />
-    <theme href="dist/dekra/index.html" css:if-content="body.section-berufsfachschulen-fuer-altenpflege-und-altenpflegehilfe" />
-
-
-
+    <theme href="dist/partner/index.html" css:if-content="body.section-partner" />
     <theme href="dist/index.html" css:if-content="body.portaltype-dps-sitecontent-contentpage" />
     <theme href="dist/full/index.html" css:if-content="body.template-search" />
 

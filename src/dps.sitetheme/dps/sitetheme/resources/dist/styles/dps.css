@@ -15072,7 +15072,7 @@ div.riform .label
 {
     .app-navitem-tab
     {
-        font-size: 1.1rem;
+        font-size: 1.23rem;
     }
 }
 .app-navitem-tab:hover
@@ -18144,6 +18144,11 @@ body.template-frontpage-view .app-pathbar
         border-left: 16px solid #fff;
         background: #fff;
     }
+}
+
+.section-partner .app-main
+{
+    border-left: 30px solid #fff;
 }
 
 .app-content

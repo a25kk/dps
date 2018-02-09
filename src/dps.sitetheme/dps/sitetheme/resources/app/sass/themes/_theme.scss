@@ -29,6 +29,9 @@
       border-left: 16px solid #fff;
       border-right: 16px solid #fff;
   }
+  @include when-inside('.section-partner') {
+    border-left: 30px solid #fff;
+  }
 }
 
 .app-content {
