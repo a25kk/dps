@@ -16554,11 +16554,11 @@ body.template-frontpage-view .app-pathbar
     }
 }
 
-.card-quick .logo-donation
+.card-quick .logo-application
 {
-    width: 86px;
-    height: 80px;
-    margin: .6rem auto 0 auto !important;
+    width: 70px;
+    height: 70px;
+    margin: .6rem auto .4rem auto !important;
 }
 
 .card-quick .subcard-bl
