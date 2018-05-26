@@ -49,10 +49,6 @@
     }
 }
 
-.app-contact-block {
-    padding: 1rem;
-}
-
 .app-contact-position {
     font-weight: 700;
     padding: 1rem;
@@ -126,12 +122,16 @@
     //@include make-row();
     //border: 1px solid red;
     @include media-breakpoint-up(sm) {
-        padding-left: 0rem;
+        padding-left: 1rem;
     } 
 }
 
 .app-card-viewlet-item {
     margin-bottom: 1rem;
+    padding: 1rem;
+    @include media-breakpoint-up(sm) {
+        padding: 0;
+    } 
 }
 
 .app-contact-element {
@@ -193,4 +193,8 @@
 
 .app-contact-actions {
     padding-top: 1rem;
+}
+
+.app-contact-block {
+    padding: 1rem;
 }

@@ -47,14 +47,14 @@
 }
 
 .app-baner-item-title {
-  font-size: 2.4rem;
+  font-size: 1.4rem;
   font-weight: 700;
   
 }
 
 .app-banner-item-headline {
-  font-size: 1.7rem;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 .app-banner-item-description {
@@ -72,6 +72,8 @@
 
 .flickity-prev-next-button {
   background: transparent;
+  position: absolute;
+  border: none;
 }
 
 .flickity-prev-next-button .arrow {
@@ -85,38 +87,28 @@
 .flickity-page-dots {
     text-align: left;
     bottom: 1rem !important;
-    padding-left: 2rem;
+    padding-left: 1rem;
 }
 
 .flickity-page-dots .dot {
     background: #fff;
 }
 
-/* ---- static banner ---- */
-
-.app-staticbanner {
-  height: 123px;
-  background: transparent url("../assets/img/sb01.jpg") repeat-x scroll top center;
-  background-size: cover;
-  body.template-frontpage-view & {display: none;} //nothing to display on homepage
-  .app-banner-item-title {
-    padding-top: 5rem;
-    padding-left: 1rem;
-    color: #fff;
-    font-size: 1.4rem;
-  }
-}
-
 .app-corporate-wrapper {
   border: 0px solid red;
   @extend.container;
+  display: none;
+  @include media-breakpoint-up(md) {
+    display: block;
+  }
+
 
   .app-coporate-logo {
     width: 160px;
     height: 160px;
     margin-top: -78px;
     margin-right: 6rem;
-    z-index: 200000000;
+    z-index: 2000;
     position: relative;
     //right: 0;
 
